@@ -26,7 +26,16 @@ const isContentCarousel = carouselMode === 'content';
 // Get all styling configuration
 const styleConfig = getCarouselStyleConfig(displaySettings, displayTemplateKey);
 
-const carouselData = data?.Assets || [];
+// Demo fallback slides when no CMS Assets are attached (media upload isn't
+// available via the CMS API). External URLs render via a plain <img> (Astro
+// <Image> only allows the configured CMS remote hosts).
+const FALLBACK_SLIDES = [
+    { _ext: true, title: 'Van Mens tot Mens — read our magazine', url: { default: 'https://images.unsplash.com/photo-1512820790803-83ca734da794?w=1200&q=80&auto=format&fit=crop' } },
+    { _ext: true, title: '“We just understand each other.”', url: { default: 'https://images.unsplash.com/photo-1559027615-cd4628902d4a?w=1200&q=80&auto=format&fit=crop' } },
+    { _ext: true, title: 'A weekly walk that means the world', url: { default: 'https://images.unsplash.com/photo-1543269865-cbf427effbad?w=1200&q=80&auto=format&fit=crop' } },
+    { _ext: true, title: 'Being there, day and night', url: { default: 'https://images.unsplash.com/photo-1576765608535-5f04d1e3f289?w=1200&q=80&auto=format&fit=crop' } },
+];
+const carouselData: any[] = (data?.Assets && data.Assets.length ? data.Assets : FALLBACK_SLIDES) as any[];
 const itemCount = carouselData.length;
 
 // Create a unique ID for this specific carousel instance
@@ -80,12 +89,21 @@ const componentClass = 'component-carousel';
                                 // Content carousel mode - show as cards
                                 <div class="card bg-base-100 shadow-xl h-full">
                                     <figure class={styleConfig.carouselHeight === 'h-auto' ? 'aspect-video' : 'flex-1'}>
-                                        <Image
-                                            src={item?.url?.default || ''}
-                                            alt={item?.title || `Carousel image ${index + 1} of ${itemCount}`}
-                                            class={`w-full h-full ${styleConfig.imageFit}`}
-                                            inferSize={true}
-                                        />
+                                        {item?._ext ? (
+                                            <img
+                                                src={item?.url?.default || ''}
+                                                alt={item?.title || `Carousel image ${index + 1} of ${itemCount}`}
+                                                class={`w-full h-full ${styleConfig.imageFit}`}
+                                                loading="lazy"
+                                            />
+                                        ) : (
+                                            <Image
+                                                src={item?.url?.default || ''}
+                                                alt={item?.title || `Carousel image ${index + 1} of ${itemCount}`}
+                                                class={`w-full h-full ${styleConfig.imageFit}`}
+                                                inferSize={true}
+                                            />
+                                        )}
                                     </figure>
                                     {item?.title && (
                                         <div class="card-body">
@@ -98,12 +116,21 @@ const componentClass = 'component-carousel';
                             ) : (
                                 // Standard carousel mode - full width images
                                 <div class="relative w-full h-full">
-                                    <Image
-                                        src={item?.url?.default || ''}
-                                        alt={item?.title || `Carousel image ${index + 1} of ${itemCount}`}
-                                        class={`w-full h-full ${styleConfig.imageFit}`}
-                                        inferSize={true}
-                                    />
+                                    {item?._ext ? (
+                                        <img
+                                            src={item?.url?.default || ''}
+                                            alt={item?.title || `Carousel image ${index + 1} of ${itemCount}`}
+                                            class={`w-full h-full ${styleConfig.imageFit}`}
+                                            loading="lazy"
+                                        />
+                                    ) : (
+                                        <Image
+                                            src={item?.url?.default || ''}
+                                            alt={item?.title || `Carousel image ${index + 1} of ${itemCount}`}
+                                            class={`w-full h-full ${styleConfig.imageFit}`}
+                                            inferSize={true}
+                                        />
+                                    )}
                                 </div>
                             )}
                         </li>

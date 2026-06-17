@@ -64,6 +64,16 @@ const cta = (links, buttonStyle = 'standard') => ({
         Links: { value: links.map((l) => ({ url: l.url, target: l.target || '_self', text: l.text })) } } },
 });
 
+// Carousel — magazine/stories slider. Assets omitted → Carousel.astro renders
+// its photographic fallback slides (booleans are strings here by design).
+const carousel = (headingText) => ({
+    id: id(), displayName: 'Magazine carousel', nodeType: 'component',
+    displaySettings: { displayTemplate: 'DefaultCarousel', settings: {
+        carouselMode: 'content', itemsPerViewDesktop: 'items2', itemsPerViewTablet: 'items2',
+        showNavigation: 'true', showPagination: 'true', autoplay: 'false', loop: 'true' } },
+    component: { contentType: 'Carousel', properties: { Heading: text(headingText) } },
+});
+
 // A big number + label, used in the impact-stats row.
 const stat = (number, label) => column([
     { id: id(), displayName: 'Text', nodeType: 'component',
@@ -103,7 +113,7 @@ const section = (rows, sectionColor = 'base_100', name = 'Section') => ({
 });
 
 // Reusable across other page seeders (e.g. Get Help).
-export { hero, heading, paragraph, card, cta, stat, collapse, column, row, section };
+export { hero, heading, paragraph, card, cta, stat, collapse, carousel, column, row, section };
 
 // ── the Humanitas home composition ───────────────────────────────────────
 // Returns a fresh composition (new node ids) on each call, so it can be used
@@ -178,6 +188,16 @@ export const humanitasComposition = () => ({
                 column([card({ heading: '“The personal approach appeals to me.”', sub: 'Peter — donor', body: '<p>Peter gives because he sees exactly how one-to-one support changes lives in his own community.</p>' })]),
             ]),
         ], 'base_100', 'Experience stories'),
+
+        // 5b) MAGAZINE — Van Mens tot Mens carousel
+        section([
+            row([column([
+                heading('Van Mens tot Mens', 'h2', 'center'),
+                paragraph('<p class="lead" style="text-align:center">Stories from volunteers, participants and partners — small gestures with a big impact, from all over the Netherlands.</p>'),
+                carousel('Read our magazine'),
+                cta([{ text: 'Read the magazine', url: 'https://www.humanitas.nl/' }], 'standard'),
+            ])]),
+        ], 'base_200', 'Van Mens tot Mens (magazine)'),
 
         // 6) GET INVOLVED — volunteer + donate (blue band)
         section([

@@ -24,6 +24,36 @@ const imageUrl = (data.Asset as any)?.item?.Url || data.Asset?.url?.default || n
 // Handle different display modes
 const isHoverMode = DisplayAs === 'hover';
 
+// Demo fallback: a topical photo when no CMS Asset is set (media upload isn't
+// available via the CMS API). Editors can attach a real Asset to override it.
+const CARD_FALLBACKS: Record<string, string> = {
+    finance: 'https://images.unsplash.com/photo-1554224155-6726b3ff858f?w=900&q=80&auto=format&fit=crop',
+    family: 'https://images.unsplash.com/photo-1476703993599-0035a21b17a9?w=900&q=80&auto=format&fit=crop',
+    loneliness: 'https://images.unsplash.com/photo-1543269865-cbf427effbad?w=900&q=80&auto=format&fit=crop',
+    grief: 'https://images.unsplash.com/photo-1518621736915-f3b1c41bfd00?w=900&q=80&auto=format&fit=crop',
+    talk: 'https://images.unsplash.com/photo-1521737604893-d14cc237f11d?w=900&q=80&auto=format&fit=crop',
+    care: 'https://images.unsplash.com/photo-1576765608535-5f04d1e3f289?w=900&q=80&auto=format&fit=crop',
+    participant: 'https://images.unsplash.com/photo-1447933601403-0c6688de566e?w=900&q=80&auto=format&fit=crop',
+    volunteer: 'https://images.unsplash.com/photo-1559027615-cd4628902d4a?w=900&q=80&auto=format&fit=crop',
+    donor: 'https://images.unsplash.com/photo-1488521787991-ed7bbaae773c?w=900&q=80&auto=format&fit=crop',
+    default: 'https://images.unsplash.com/photo-1469571486292-0ba58a3f068b?w=900&q=80&auto=format&fit=crop',
+};
+function pickCardFallback(d: any): string {
+    const sub = String(d?.SubHeading || '').toLowerCase();
+    if (sub.includes('participant')) return CARD_FALLBACKS.participant;
+    if (sub.includes('volunteer')) return CARD_FALLBACKS.volunteer;
+    if (sub.includes('donor')) return CARD_FALLBACKS.donor;
+    const h = String(d?.Heading || '').toLowerCase();
+    if (/debt|admin|money|finance/.test(h)) return CARD_FALLBACKS.finance;
+    if (/home-start|famil|parent/.test(h)) return CARD_FALLBACKS.family;
+    if (/lonel|friend|contact/.test(h)) return CARD_FALLBACKS.loneliness;
+    if (/grief|bereav|loss/.test(h)) return CARD_FALLBACKS.grief;
+    if (/detention|reintegr/.test(h)) return CARD_FALLBACKS.talk;
+    if (/palliat|terminal|care/.test(h)) return CARD_FALLBACKS.care;
+    return CARD_FALLBACKS.default;
+}
+const fallbackUrl = !imageUrl && !isHoverMode ? pickCardFallback(data) : null;
+
 // Get image tint settings from display settings (only for hover mode)
 const dictionary = getDictionaryFromDisplaySettings(displaySettings);
 const imageTintLevel = dictionary['imageTintLevel'] || 'o_0'; // default no tint
@@ -68,7 +98,7 @@ const finalContainerClasses = [containerClasses];
 
 <div class:list={finalContainerClasses}>
     {
-        imageUrl && (
+        imageUrl ? (
             <>
                 <AstroImage
                     alt={data.Asset?.item?.AltText || data.Asset?.item?._metadata?.displayName || data.Heading || 'Card image'}
@@ -81,6 +111,13 @@ const finalContainerClasses = [containerClasses];
                     <div class={`absolute inset-0 ${imageTintClass} z-5`}></div>
                 )}
             </>
+        ) : fallbackUrl && (
+            <img
+                src={fallbackUrl}
+                alt={data.Heading || 'Card image'}
+                class={`${imageClasses} aspect-[4/3] w-full`}
+                loading="lazy"
+            />
         )
     }
 </div>
