@@ -17,10 +17,15 @@ const html = (s) => ({ value: { html: s } });
 const text = (s) => ({ value: s });
 
 // ── leaf component builders ──────────────────────────────────────────────
-const hero = (heading, body) => ({
+// Hero component — photographic background (with repo fallback) + heading/body/CTAs.
+const hero = (headingText, body, links = []) => ({
     id: id(), displayName: 'Hero', nodeType: 'component',
-    displaySettings: { displayTemplate: 'DefaultHero', settings: {} },
-    component: { contentType: 'Hero', properties: { Heading: text(heading), Body: html(body) } },
+    displaySettings: { displayTemplate: 'DefaultHero', settings: { hero_height: 'h_38rem', text_placement: 'center', text_color: 'white', hoverEffect: 'none' } },
+    component: { contentType: 'Hero', properties: {
+        Heading: text(headingText),
+        Body: html(body),
+        Links: { value: links.map((l) => ({ url: l.url, target: l.target || '_self', text: l.text })) },
+    } },
 });
 
 const heading = (content, level = 'h2', align = 'center') => ({
@@ -90,8 +95,8 @@ const row = (columns, settings = {}) => ({
     nodes: columns,
 });
 
-const section = (rows, sectionColor = 'base_100') => ({
-    id: id(), displayName: 'Section', nodeType: 'section', layoutType: 'grid',
+const section = (rows, sectionColor = 'base_100', name = 'Section') => ({
+    id: id(), displayName: name, nodeType: 'section', layoutType: 'grid',
     displaySettings: { displayTemplate: 'DefaultSection', settings: { gridWidth: 'default', vSpacing: 'default', sectionColor } },
     component: { contentType: 'BlankSection' },
     nodes: rows,
@@ -106,18 +111,16 @@ export { hero, heading, paragraph, card, cta, stat, collapse, column, row, secti
 export const humanitasComposition = () => ({
     id: id(), displayName: 'Humanitas — Home', nodeType: 'experience', layoutType: 'outline',
     nodes: [
-        // 1) HERO — brand-blue banner with the three primary actions (mirrors humanitas.nl)
-        section([
-            row([column([
-                heading('Our volunteers are here to help you', 'h1', 'center'),
-                paragraph('<p class="lead" style="text-align:center">Humanitas is the Netherlands’ largest volunteer organisation. For 80 years we’ve helped people change their own situation — through their own strength, with someone alongside them. No judgement, just support, from one person to another.</p>'),
-                cta([
-                    { text: 'I need help', url: '/en/get-help/' },
-                    { text: 'I want to volunteer', url: 'https://www.humanitas.nl/vrijwilligerswerk/' },
-                    { text: 'I want to donate', url: 'https://www.humanitas.nl/doneer/' },
-                ], 'standard'),
-            ])]),
-        ], 'primary'),
+        // 1) HERO — photographic banner with the three primary actions
+        hero(
+            'Our volunteers are here to help you',
+            '<p>Humanitas is the Netherlands’ largest volunteer organisation. For 80 years we’ve helped people change their own situation — through their own strength, with someone alongside them.</p>',
+            [
+                { text: 'I need help', url: '/en/get-help/' },
+                { text: 'I want to volunteer', url: 'https://www.humanitas.nl/vrijwilligerswerk/' },
+                { text: 'I want to donate', url: 'https://www.humanitas.nl/doneer/' },
+            ],
+        ),
 
         // 2) CAMPAIGN SPOTLIGHT — Stop the debt industry
         section([
@@ -132,9 +135,9 @@ export const humanitasComposition = () => ({
                     cta([{ text: 'Support the campaign', url: 'https://www.humanitas.nl/' }], 'outline'),
                 ]),
             ]),
-        ], 'accent'),
+        ], 'base_200', 'Campaign — Stop the debt industry'),
 
-        // 3) HOW WE HELP — six themes
+        // 3) WHAT WE DO — six themes
         section([
             row([column([
                 heading('What we do', 'h2', 'center'),
@@ -150,9 +153,9 @@ export const humanitasComposition = () => ({
                 column([card({ heading: 'Detention & reintegration', body: '<p>A criminal record shouldn’t define a life. We support people during and after detention to rebuild contact, structure and a future.</p>', linkText: 'Learn more', linkUrl: '/en/get-help/' })]),
                 column([card({ heading: 'Palliative & terminal care', body: '<p>No one should have to be alone in their final months. Trained volunteers offer presence and relief, day or night, at home or in a hospice.</p>', linkText: 'Learn more', linkUrl: '/en/get-help/' })]),
             ]),
-        ], 'base_100'),
+        ], 'base_100', 'What we do'),
 
-        // 4) IMPACT — statistics row
+        // 4) IMPACT — statistics row (blue band)
         section([
             row([column([heading('Our impact', 'h2', 'center')])]),
             row([
@@ -161,7 +164,7 @@ export const humanitasComposition = () => ({
                 stat('80 years', 'supporting people since 1945'),
                 stat('€208M', 'saved for society each year'),
             ]),
-        ], 'base_200'),
+        ], 'primary', 'Impact'),
 
         // 5) EXPERIENCE STORIES
         section([
@@ -174,9 +177,9 @@ export const humanitasComposition = () => ({
                 column([card({ heading: '“Being there at night means everything.”', sub: 'Henk — volunteer', body: '<p>Henk provides palliative night care so families can rest, knowing their loved one isn’t alone.</p>' })]),
                 column([card({ heading: '“The personal approach appeals to me.”', sub: 'Peter — donor', body: '<p>Peter gives because he sees exactly how one-to-one support changes lives in his own community.</p>' })]),
             ]),
-        ], 'base_100'),
+        ], 'base_100', 'Experience stories'),
 
-        // 6) GET INVOLVED — volunteer + donate
+        // 6) GET INVOLVED — volunteer + donate (blue band)
         section([
             row([column([
                 heading('Get involved', 'h2', 'center'),
@@ -186,7 +189,7 @@ export const humanitasComposition = () => ({
                     { text: 'Donate', url: 'https://www.humanitas.nl/doneer/' },
                 ], 'standard'),
             ])]),
-        ], 'primary'),
+        ], 'primary', 'Get involved'),
 
         // 7) FAQ
         section([
@@ -197,7 +200,7 @@ export const humanitasComposition = () => ({
                 collapse('How do I become a volunteer?', '<p>Tell us a bit about yourself and the kind of work you’d like to do. You’ll get training and ongoing guidance, and you choose how much time you give.</p>'),
                 collapse('How is Humanitas funded?', '<p>Through donations, members, grants and partnerships such as the Postcode Loterij. Humanitas holds the CBF seal of approval and ANBI status.</p>'),
             ])]),
-        ], 'base_200'),
+        ], 'base_100', 'FAQ'),
 
         // 8) NEWSLETTER
         section([
@@ -206,7 +209,7 @@ export const humanitasComposition = () => ({
                 paragraph('<p class="lead" style="text-align:center">Get stories from volunteers and participants in your inbox — our “Van Mens tot Mens” newsletter, a few times a year.</p>'),
                 cta([{ text: 'Sign up for our newsletter', url: 'https://www.humanitas.nl/' }], 'standard'),
             ])]),
-        ], 'base_100'),
+        ], 'base_200', 'Newsletter'),
     ],
 });
 

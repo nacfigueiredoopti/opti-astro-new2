@@ -28,6 +28,11 @@ const heroButtonStyles = getButtonStyles(displaySettings, false); // false: butt
 const imageUrl = (data?.Image as any)?.item?.Url || data?.Image?.url?.default || null;
 const imageAltText = (data.Image as any)?.item?.AltText || (data.Image as any)?.item?._metadata?.displayName || data.Heading || '';
 
+// Fallback photographic background when no CMS image/video is set, so heroes are
+// never an empty colour block. Editors can drop in a CMS image to override it.
+const DEFAULT_HERO_IMAGE =
+    'https://images.unsplash.com/photo-1521791136064-7986c2920216?w=1920&q=80&auto=format&fit=crop';
+
 const videoUrl = (data?.Video as any)?.item?.Url || data?.Video?.url?.default || null;
 const hasVideo = videoUrl !== null;
 
@@ -77,6 +82,16 @@ const componentClass = 'component-hero';
                 class={`absolute inset-0 h-full w-full ${imageFitClass}`}
                 id="hero-image"
                 inferSize={true}
+            />
+        )
+    }
+
+    {
+        !hasVideo && !imageUrl && (
+            <div
+                class="absolute inset-0 bg-cover bg-center"
+                style={`background-image:url('${DEFAULT_HERO_IMAGE}')`}
+                aria-hidden="true"
             />
         )
     }

@@ -13,6 +13,10 @@ console.log('current:', cur.displayName, '| domain:', cur.properties?.SiteDomain
 const props = { ...(cur.properties || {}) };
 const set = (k, val) => { props[k] = { value: val }; };
 
+// Clear the old (Cadac) logo so the header/footer fall back to /humanitas-logo.svg
+delete props.Logo;
+delete props.LogoResolution;
+
 set('FooterText', "Humanitas — from person to person. The Netherlands’ largest volunteer organisation, helping people change their own situation in their own strength since 1945.");
 set('SocialFacebook', 'humanitasnederland');
 set('SocialInstagram', 'humanitas_nederland');
