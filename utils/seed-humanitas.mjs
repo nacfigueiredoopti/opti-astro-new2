@@ -35,22 +35,42 @@ const paragraph = (htmlStr) => ({
     component: { contentType: 'Paragraph', properties: { Text: html(htmlStr) } },
 });
 
-const card = (h, bodyHtml, linkText, linkUrl) => ({
-    id: id(), displayName: 'Card', nodeType: 'component',
-    displaySettings: { displayTemplate: 'DefaultCard', settings: {
-        transform: 'keep', buttonStyle: 'standard', buttonWidth: 'w_12rem', buttonSize: 'medium',
-        buttonRadius: 'lg', buttonAction: 'static', assetWidth: 'flex_1', contentWidth: 'flex_1',
-        textAlign: 'left', transformHeader: 'normal_case', assetVerticalAlign: 'center',
-        contentVerticalAlign: 'center', backgroundColor: 'base_100' } },
-    component: { contentType: 'Card', properties: {
-        Heading: text(h), Body: html(bodyHtml), DisplayAs: text('textBelowCard'),
-        Links: { value: [{ url: linkUrl, target: '_self', text: linkText }] } } },
+// card({ heading, sub, body, linkText, linkUrl })
+const card = ({ heading: h, sub, body, linkText, linkUrl }) => {
+    const props = { Heading: text(h), Body: html(body), DisplayAs: text('textBelowCard') };
+    if (sub) props.SubHeading = text(sub);
+    if (linkText && linkUrl) props.Links = { value: [{ url: linkUrl, target: '_self', text: linkText }] };
+    return {
+        id: id(), displayName: 'Card', nodeType: 'component',
+        displaySettings: { displayTemplate: 'DefaultCard', settings: {
+            transform: 'keep', buttonStyle: 'standard', buttonWidth: 'w_12rem', buttonSize: 'medium',
+            buttonRadius: 'lg', buttonAction: 'static', assetWidth: 'flex_1', contentWidth: 'flex_1',
+            textAlign: 'left', transformHeader: 'normal_case', assetVerticalAlign: 'center',
+            contentVerticalAlign: 'center', backgroundColor: 'base_100' } },
+        component: { contentType: 'Card', properties: props },
+    };
+};
+
+// cta([{text,url}], style) — one CallToAction renders one or more buttons.
+const cta = (links, buttonStyle = 'standard') => ({
+    id: id(), displayName: 'Call To Action', nodeType: 'component',
+    displaySettings: { displayTemplate: 'DefaultCallToAction', settings: { transform: 'keep', buttonStyle, buttonWidth: 'auto', buttonSize: 'lg' } },
+    component: { contentType: 'CallToAction', properties: {
+        Links: { value: links.map((l) => ({ url: l.url, target: l.target || '_self', text: l.text })) } } },
 });
 
-const cta = (label, url) => ({
-    id: id(), displayName: 'Call To Action', nodeType: 'component',
-    displaySettings: { displayTemplate: 'DefaultCallToAction', settings: { transform: 'keep', buttonStyle: 'standard', buttonWidth: 'w_12rem', buttonSize: 'lg' } },
-    component: { contentType: 'CallToAction', properties: { Links: { value: [{ url, target: '_self', text: label }] } } },
+// A big number + label, used in the impact-stats row.
+const stat = (number, label) => column([
+    { id: id(), displayName: 'Text', nodeType: 'component',
+      displaySettings: { displayTemplate: 'TextStyles', settings: { headingType: 'h2', textAlign: 'center', showAs: 'heading', transform: 'keep' } },
+      component: { contentType: 'Text', properties: { Content: text(number) } } },
+    paragraph(`<p style="text-align:center">${label}</p>`),
+]);
+
+// FAQ accordion item.
+const collapse = (h, bodyHtml) => ({
+    id: id(), displayName: 'Collapse', nodeType: 'component',
+    component: { contentType: 'Collapse', properties: { Heading: text(h), Body: html(bodyHtml) } },
 });
 
 // ── layout wrappers ──────────────────────────────────────────────────────
@@ -77,40 +97,116 @@ const section = (rows, sectionColor = 'base_100') => ({
     nodes: rows,
 });
 
+// Reusable across other page seeders (e.g. Get Help).
+export { hero, heading, paragraph, card, cta, stat, collapse, column, row, section };
+
 // ── the Humanitas home composition ───────────────────────────────────────
 // Returns a fresh composition (new node ids) on each call, so it can be used
 // both to create new content and to add a new version to existing content.
 export const humanitasComposition = () => ({
     id: id(), displayName: 'Humanitas — Home', nodeType: 'experience', layoutType: 'outline',
     nodes: [
-        hero(
-            'People supporting people',
-            "<p>Humanitas is the Netherlands' largest volunteer organisation. For more than 75 years we have helped people change their own situation — through their own strength, with a little help from someone alongside them. No judgement, just support, from one person to another.</p>"
-        ),
+        // 1) HERO — brand-blue banner with the three primary actions (mirrors humanitas.nl)
         section([
             row([column([
-                heading('How we help', 'h2', 'center'),
-                paragraph('<p class="lead">Whatever you are facing, you don\'t have to face it alone. Our trained volunteers are there for you — free, confidential and close by.</p>'),
+                heading('Our volunteers are here to help you', 'h1', 'center'),
+                paragraph('<p class="lead" style="text-align:center">Humanitas is the Netherlands’ largest volunteer organisation. For 80 years we’ve helped people change their own situation — through their own strength, with someone alongside them. No judgement, just support, from one person to another.</p>'),
+                cta([
+                    { text: 'I need help', url: '/en/get-help/' },
+                    { text: 'I want to volunteer', url: 'https://www.humanitas.nl/vrijwilligerswerk/' },
+                    { text: 'I want to donate', url: 'https://www.humanitas.nl/doneer/' },
+                ], 'standard'),
+            ])]),
+        ], 'primary'),
+
+        // 2) CAMPAIGN SPOTLIGHT — Stop the debt industry
+        section([
+            row([
+                column([
+                    heading('726,000', 'h1', 'center'),
+                    paragraph('<p style="text-align:center"><strong>households in the Netherlands struggle with problematic debt.</strong></p>'),
+                ]),
+                column([
+                    heading('Stop the debt industry', 'h2', 'left'),
+                    paragraph('<p>Debt should never be a business model. We help people out of debt one-to-one — and we campaign for a fairer system so fewer people get stuck in the first place. <strong>No one should feel ashamed of debt.</strong></p>'),
+                    cta([{ text: 'Support the campaign', url: 'https://www.humanitas.nl/' }], 'outline'),
+                ]),
+            ]),
+        ], 'accent'),
+
+        // 3) HOW WE HELP — six themes
+        section([
+            row([column([
+                heading('What we do', 'h2', 'center'),
+                paragraph('<p class="lead" style="text-align:center">Whatever you’re facing, you don’t have to face it alone. Our trained volunteers are there for you — free, confidential and close by.</p>'),
             ])]),
             row([
-                column([card('Debt & admin support',
-                    '<p>Money worries can feel overwhelming. A volunteer helps you get your paperwork and finances back in order, step by step. No one should feel ashamed of debt.</p>',
-                    'Find debt support', '/get-help/')]),
-                column([card('Home-Start: family support',
-                    '<p>Parenting is wonderful — and hard. An experienced volunteer visits families with young children to lend a hand and a listening ear.</p>',
-                    'Support for families', '/get-help/')]),
-                column([card('Friendship & contact',
-                    '<p>Feeling lonely can happen to anyone. We bring people together for a chat, a walk or a coffee — small moments of contact that make a real difference.</p>',
-                    'Find a buddy', '/get-help/')]),
+                column([card({ heading: 'Debt & admin support', body: '<p>Money worries can feel overwhelming. A volunteer helps you get your paperwork and finances back in order, step by step.</p>', linkText: 'Learn more', linkUrl: '/en/get-help/' })]),
+                column([card({ heading: 'Home-Start: families', body: '<p>Parenting is wonderful — and hard. An experienced volunteer visits families with young children to lend a hand and a listening ear.</p>', linkText: 'Learn more', linkUrl: '/en/get-help/' })]),
+                column([card({ heading: 'Loneliness & friendship', body: '<p>Feeling lonely can happen to anyone. We bring people together for a chat, a walk or a coffee — small moments of contact that matter.</p>', linkText: 'Learn more', linkUrl: '/en/get-help/' })]),
+            ]),
+            row([
+                column([card({ heading: 'Grief & bereavement', body: '<p>Losing someone you love turns your world upside down. A volunteer walks beside you and gives your grief the time and space it needs.</p>', linkText: 'Learn more', linkUrl: '/en/get-help/' })]),
+                column([card({ heading: 'Detention & reintegration', body: '<p>A criminal record shouldn’t define a life. We support people during and after detention to rebuild contact, structure and a future.</p>', linkText: 'Learn more', linkUrl: '/en/get-help/' })]),
+                column([card({ heading: 'Palliative & terminal care', body: '<p>No one should have to be alone in their final months. Trained volunteers offer presence and relief, day or night, at home or in a hospice.</p>', linkText: 'Learn more', linkUrl: '/en/get-help/' })]),
             ]),
         ], 'base_100'),
+
+        // 4) IMPACT — statistics row
+        section([
+            row([column([heading('Our impact', 'h2', 'center')])]),
+            row([
+                stat('20,000+', 'volunteers across the country'),
+                stat('700+', 'local activities every year'),
+                stat('80 years', 'supporting people since 1945'),
+                stat('€208M', 'saved for society each year'),
+            ]),
+        ], 'base_200'),
+
+        // 5) EXPERIENCE STORIES
+        section([
+            row([column([
+                heading('Experience stories', 'h2', 'center'),
+                paragraph('<p class="lead" style="text-align:center">From person to person. These are some of the people behind Humanitas.</p>'),
+            ])]),
+            row([
+                column([card({ heading: '“No one should feel ashamed of debt.”', sub: 'Rozemarijn — participant', body: '<p>With a volunteer beside her, Rozemarijn got her finances back on track and her confidence back too.</p>' })]),
+                column([card({ heading: '“Being there at night means everything.”', sub: 'Henk — volunteer', body: '<p>Henk provides palliative night care so families can rest, knowing their loved one isn’t alone.</p>' })]),
+                column([card({ heading: '“The personal approach appeals to me.”', sub: 'Peter — donor', body: '<p>Peter gives because he sees exactly how one-to-one support changes lives in his own community.</p>' })]),
+            ]),
+        ], 'base_100'),
+
+        // 6) GET INVOLVED — volunteer + donate
         section([
             row([column([
                 heading('Get involved', 'h2', 'center'),
-                paragraph('<p class="lead">Humanitas runs on people like you. Become a volunteer and give your time, or support our work with a donation — together we help each other move forward.</p>'),
-                cta('Become a volunteer', 'https://www.humanitas.nl/vrijwilligerswerk/'),
+                paragraph('<p class="lead" style="text-align:center">Humanitas runs on people like you. Give your time as a volunteer, or support our work with a donation — together we help each other move forward.</p>'),
+                cta([
+                    { text: 'Become a volunteer', url: 'https://www.humanitas.nl/vrijwilligerswerk/' },
+                    { text: 'Donate', url: 'https://www.humanitas.nl/doneer/' },
+                ], 'standard'),
             ])]),
         ], 'primary'),
+
+        // 7) FAQ
+        section([
+            row([column([heading('Frequently asked questions', 'h2', 'center')])]),
+            row([column([
+                collapse('How do I get help?', '<p>Choose the theme that fits your situation and get in touch with the Humanitas group near you. A volunteer will contact you for a no-obligation conversation.</p>'),
+                collapse('Is support really free?', '<p>Yes. Humanitas support is always free and confidential. We’re a volunteer organisation — there are no costs for participants.</p>'),
+                collapse('How do I become a volunteer?', '<p>Tell us a bit about yourself and the kind of work you’d like to do. You’ll get training and ongoing guidance, and you choose how much time you give.</p>'),
+                collapse('How is Humanitas funded?', '<p>Through donations, members, grants and partnerships such as the Postcode Loterij. Humanitas holds the CBF seal of approval and ANBI status.</p>'),
+            ])]),
+        ], 'base_200'),
+
+        // 8) NEWSLETTER
+        section([
+            row([column([
+                heading('Stay connected', 'h2', 'center'),
+                paragraph('<p class="lead" style="text-align:center">Get stories from volunteers and participants in your inbox — our “Van Mens tot Mens” newsletter, a few times a year.</p>'),
+                cta([{ text: 'Sign up for our newsletter', url: 'https://www.humanitas.nl/' }], 'standard'),
+            ])]),
+        ], 'base_100'),
     ],
 });
 
