@@ -64,8 +64,8 @@ const headerItems = settings?.HeaderLinks as MenuItemType[] | undefined;
                 <span class="sr-only">Home</span>
                 <AstroImage
                     class:list={[logoCss, "w-full object-contain max-w-full"]}
-                    src={logoUrl ?? '/optimizely-logo.svg'}
-                    alt="Logo"
+                    src={logoUrl ?? '/humanitas-logo.svg'}
+                    alt="Humanitas"
                     width=300
                     height=300
                 />
@@ -128,7 +128,7 @@ const headerItems = settings?.HeaderLinks as MenuItemType[] | undefined;
             <LocaleSelector contentPayload={contentPayload} />
             <!-- Theme switcher dropdown -->
             <ThemePicker />
-            <a class="btn" href="https://home.optimizely.com/">Log In</a>
+            <a class="btn btn-primary" href="https://www.humanitas.nl/doneer/">Donate</a>
             <!-- Drawer Right mode: Hamburger button on ALL breakpoints (RIGHT side, after login) -->
             {isDrawerRight && <HeaderDrawerMenuButton direction="right" />}
         </div>
