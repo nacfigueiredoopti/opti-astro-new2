@@ -1,6 +1,9 @@
 @import 'tailwindcss';
 /* @import './inter.css'; */
-/* @theme {--font-sans: InterVariable, sans-serif;} */
+/* Lumin Wealth typography: Helvetica Neue family (light headings, roman body) */
+@theme {
+    --font-sans: 'Helvetica Neue', Helvetica, Arial, 'Lucida Grande', sans-serif;
+}
 
 @plugin "@tailwindcss/typography";
 @plugin "daisyui" {
@@ -58,10 +61,10 @@
         @apply mb-4;
     }
     h1 {
-        @apply text-3xl;
+        @apply text-3xl font-light;
     }
     h2 {
-        @apply text-2xl;
+        @apply text-2xl font-light;
     }
     h3 {
         @apply text-xl;
@@ -78,9 +81,11 @@
 }
 
 /* ─────────────────────────────────────────────────────────────────────────
-   Lumin Wealth brand theme (daisyUI v5). Navy + gold palette matching the
-   Lumin Wealth logo: deep navy primary, warm gold accent, calm light
-   neutrals, white base. Registered as the site default (see Layout.astro
+   Lumin Wealth brand theme (daisyUI v5). Palette taken from the real
+   luminwealth.co.uk design tokens: deep navy primary #002A5A, terracotta
+   CTA/secondary #C15527, steel-blue accent #7088A2, near-black text,
+   warm light-grey neutrals, cream highlight. Square-ish professional
+   radii. Registered as the site default (see Layout.astro
    data-theme="lumin").
    ───────────────────────────────────────────────────────────────────────── */
 @plugin "daisyui/theme" {
@@ -90,31 +95,31 @@
     color-scheme: 'light';
 
     --color-base-100: #ffffff;
-    --color-base-200: #f6f7f9;
-    --color-base-300: #e6e9ef;
-    --color-base-content: #1b2a4a;
+    --color-base-200: #ececea;
+    --color-base-300: #dbe0e4;
+    --color-base-content: #181818;
 
-    --color-primary: #1b2a4a;
+    --color-primary: #002a5a;
     --color-primary-content: #ffffff;
-    --color-secondary: #2e4a7a;
+    --color-secondary: #c15527;
     --color-secondary-content: #ffffff;
-    --color-accent: #c9932a;
+    --color-accent: #7088a2;
     --color-accent-content: #ffffff;
-    --color-neutral: #1b2a4a;
+    --color-neutral: #181818;
     --color-neutral-content: #ffffff;
 
-    --color-info: #2f6fb8;
+    --color-info: #004388;
     --color-info-content: #ffffff;
     --color-success: #2e7d57;
     --color-success-content: #ffffff;
-    --color-warning: #e8b84b;
-    --color-warning-content: #1b2a4a;
+    --color-warning: #f7ecdf;
+    --color-warning-content: #181818;
     --color-error: #c0392b;
     --color-error-content: #ffffff;
 
-    --radius-selector: 1rem;
-    --radius-field: 0.5rem;
-    --radius-box: 1rem;
+    --radius-selector: 0.5rem;
+    --radius-field: 0.25rem;
+    --radius-box: 0.5rem;
     --size-selector: 0.25rem;
     --size-field: 0.25rem;
     --border: 1px;

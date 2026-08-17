@@ -1,28 +1,23 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="560" height="120" viewBox="0 0 560 120" role="img" aria-label="Lumin Wealth">
-  <!-- Original fictional-demo logo for Lumin Wealth. Navy + gold. -->
-  <defs>
-    <linearGradient id="lw-gold" x1="0" y1="0" x2="1" y2="1">
-      <stop offset="0" stop-color="#E8B84B"/>
-      <stop offset="1" stop-color="#C9932A"/>
-    </linearGradient>
-  </defs>
+  <!-- Original fictional-demo logo for Lumin Wealth. Charcoal wordmark + blue mark
+       (color language matched to the real brand; artwork is original). -->
   <!-- Sun / light glyph: rising half-sun over a horizon line -->
   <g transform="translate(60,62)">
-    <path d="M -34 8 A 34 34 0 0 1 34 8 Z" fill="url(#lw-gold)"/>
-    <g stroke="url(#lw-gold)" stroke-width="6" stroke-linecap="round">
+    <path d="M -34 8 A 34 34 0 0 1 34 8 Z" fill="#004388"/>
+    <g stroke="#004388" stroke-width="6" stroke-linecap="round">
       <line x1="0" y1="-44" x2="0" y2="-58"/>
       <line x1="-31" y1="-31" x2="-41" y2="-41"/>
       <line x1="31" y1="-31" x2="41" y2="-41"/>
       <line x1="-44" y1="0" x2="-58" y2="0"/>
       <line x1="44" y1="0" x2="58" y2="0"/>
     </g>
-    <rect x="-52" y="14" width="104" height="6" rx="3" fill="#1B2A4A"/>
+    <rect x="-52" y="14" width="104" height="6" rx="3" fill="#004388"/>
   </g>
   <!-- Wordmark -->
-  <text x="140" y="72" font-family="Avenir Next, Segoe UI, Helvetica Neue, Arial, sans-serif"
-        font-size="46" font-weight="600" letter-spacing="1" fill="#1B2A4A">Lumin
-    <tspan font-weight="300" fill="#1B2A4A" dx="8">Wealth</tspan>
+  <text x="140" y="72" font-family="Helvetica Neue, Helvetica, Arial, Lucida Grande, sans-serif"
+        font-size="46" font-weight="600" letter-spacing="1" fill="#1D1D1B">Lumin
+    <tspan font-weight="300" fill="#1D1D1B" dx="8">Wealth</tspan>
   </text>
-  <text x="142" y="96" font-family="Avenir Next, Segoe UI, Helvetica Neue, Arial, sans-serif"
-        font-size="15" font-weight="400" letter-spacing="4" fill="#C9932A">YOUR TRUSTED FINANCIAL PLANNING PARTNER</text>
+  <text x="142" y="96" font-family="Helvetica Neue, Helvetica, Arial, Lucida Grande, sans-serif"
+        font-size="15" font-weight="400" letter-spacing="4" fill="#7088A2">YOUR TRUSTED FINANCIAL PLANNING PARTNER</text>
 </svg>
