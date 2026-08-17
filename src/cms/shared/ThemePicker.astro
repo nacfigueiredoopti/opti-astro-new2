@@ -92,12 +92,11 @@ const themes = [
 
         // Set default theme if none is stored
         if (!localStorage.getItem('theme')) {
-            localStorage.setItem('theme', 'light');
-            document.documentElement.setAttribute('data-theme', 'light');
+            localStorage.setItem('theme', 'lumin');
+            document.documentElement.setAttribute('data-theme', 'lumin');
         }
-        
-        // Add event listener to theme buttons after page load
-        document.addEventListener('astro:page-load', function () {
+
+        function attachThemeButtons() {
             const themeButtons = document.querySelectorAll('[data-set-theme]');
             themeButtons.forEach((button) => {
                 button.addEventListener('click', function () {
@@ -106,7 +105,16 @@ const themes = [
                     localStorage.setItem('theme', theme);
                 });
             });
-        });
+        }
+
+        // astro:page-load only fires with the view-transitions router; also
+        // attach on normal page loads or the buttons never get handlers
+        document.addEventListener('astro:page-load', attachThemeButtons);
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', attachThemeButtons);
+        } else {
+            attachThemeButtons();
+        }
     })();
 </script>
 

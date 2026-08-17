@@ -7,7 +7,6 @@ import type { ContentPayload } from '../../graphql/shared/ContentPayload';
 import { localeToSdkLocale } from '../../lib/locale-helpers';
 import { getClassForLogo } from './siteSettingsHelper';
 import SearchPaletteV2 from './SearchPaletteV2.svelte';
-import ThemePicker from './ThemePicker.astro';
 import LocaleSelector from './LocaleSelector.astro';
 import HeaderDrawerMenuButton from './HeaderDrawerMenuButton.astro';
 import HeaderMobileDropdownNav from './HeaderMobileDropdownNav.astro';
@@ -126,8 +125,6 @@ const headerItems = settings?.HeaderLinks as MenuItemType[] | undefined;
             </button>
             <!-- Locale selector -->
             <LocaleSelector contentPayload={contentPayload} />
-            <!-- Theme switcher dropdown -->
-            <ThemePicker />
             <a class="btn btn-primary" href={getRelativeLocaleUrl(lang, '/book-a-consultation/')}>Book a consultation</a>
             <!-- Drawer Right mode: Hamburger button on ALL breakpoints (RIGHT side, after login) -->
             {isDrawerRight && <HeaderDrawerMenuButton direction="right" />}
