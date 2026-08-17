@@ -1,0 +1,7 @@
+{
+	"key": "DefaultMortgageCalculator",
+	"displayName": "Mortgage Calculator",
+	"contentType": "MortgageCalculator",
+	"isDefault": true,
+	"settings": {}
+}
