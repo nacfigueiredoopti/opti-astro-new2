@@ -1,7 +1,0 @@
-<svg width="300" height="64" viewBox="0 0 300 64" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Humanitas">
-  <!-- friendly heart mark -->
-  <path d="M30 50C30 50 8 38 8 22.5 8 14.9 14.0 9 21.3 9c4.5 0 7.6 2.4 8.7 5.6C31.1 11.4 34.2 9 38.7 9 46.0 9 52 14.9 52 22.5 52 38 30 50 30 50Z" fill="#0a5bab"/>
-  <circle cx="38.5" cy="20.5" r="3.4" fill="#ee7203"/>
-  <!-- wordmark -->
-  <text x="68" y="42" font-family="'Figtree','Helvetica Neue',Arial,sans-serif" font-size="34" font-weight="800" letter-spacing="-0.8" fill="#0a5bab">humanitas</text>
-</svg>

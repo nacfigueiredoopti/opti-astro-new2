@@ -78,14 +78,57 @@
 }
 
 /* ─────────────────────────────────────────────────────────────────────────
-   Humanitas brand theme (daisyUI v5). Blue-forward palette mirroring
-   humanitas.nl: deep royal blue primary, bright sky-blue secondary, warm
+   Lumin Wealth brand theme (daisyUI v5). Navy + gold palette matching the
+   Lumin Wealth logo: deep navy primary, warm gold accent, calm light
    neutrals, white base. Registered as the site default (see Layout.astro
-   data-theme="humanitas").
+   data-theme="lumin").
+   ───────────────────────────────────────────────────────────────────────── */
+@plugin "daisyui/theme" {
+    name: 'lumin';
+    default: true;
+    prefersdark: false;
+    color-scheme: 'light';
+
+    --color-base-100: #ffffff;
+    --color-base-200: #f6f7f9;
+    --color-base-300: #e6e9ef;
+    --color-base-content: #1b2a4a;
+
+    --color-primary: #1b2a4a;
+    --color-primary-content: #ffffff;
+    --color-secondary: #2e4a7a;
+    --color-secondary-content: #ffffff;
+    --color-accent: #c9932a;
+    --color-accent-content: #ffffff;
+    --color-neutral: #1b2a4a;
+    --color-neutral-content: #ffffff;
+
+    --color-info: #2f6fb8;
+    --color-info-content: #ffffff;
+    --color-success: #2e7d57;
+    --color-success-content: #ffffff;
+    --color-warning: #e8b84b;
+    --color-warning-content: #1b2a4a;
+    --color-error: #c0392b;
+    --color-error-content: #ffffff;
+
+    --radius-selector: 1rem;
+    --radius-field: 0.5rem;
+    --radius-box: 1rem;
+    --size-selector: 0.25rem;
+    --size-field: 0.25rem;
+    --border: 1px;
+    --depth: 1;
+    --noise: 0;
+}
+
+/* ─────────────────────────────────────────────────────────────────────────
+   Humanitas brand theme (daisyUI v5), kept for backwards compatibility —
+   visitors may still have data-theme="humanitas" persisted in localStorage.
    ───────────────────────────────────────────────────────────────────────── */
 @plugin "daisyui/theme" {
     name: 'humanitas';
-    default: true;
+    default: false;
     prefersdark: false;
     color-scheme: 'light';
 
