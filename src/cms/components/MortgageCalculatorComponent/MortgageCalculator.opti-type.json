@@ -1,0 +1,99 @@
+{
+	"key": "MortgageCalculator",
+	"displayName": "Mortgage Calculator",
+	"description": "Interactive UK mortgage repayment calculator with configurable defaults.",
+	"baseType": "component",
+	"sortOrder": 0,
+	"mayContainTypes": [],
+	"mediaFileExtensions": [],
+	"compositionBehaviors": [
+		"elementEnabled"
+	],
+	"properties": {
+		"Heading": {
+			"type": "string",
+			"format": "shortString",
+			"displayName": "Heading",
+			"description": "",
+			"localized": false,
+			"required": false,
+			"group": "Information",
+			"sortOrder": 10,
+			"indexingType": "searchable",
+			"editorSettings": {}
+		},
+		"Intro": {
+			"type": "richText",
+			"displayName": "Intro",
+			"description": "",
+			"localized": false,
+			"required": false,
+			"group": "Information",
+			"sortOrder": 20,
+			"indexingType": "searchable",
+			"editorSettings": {}
+		},
+		"DefaultPropertyPrice": {
+			"type": "integer",
+			"displayName": "Default Property Price (£)",
+			"description": "",
+			"localized": false,
+			"required": false,
+			"group": "Information",
+			"sortOrder": 30,
+			"editorSettings": {}
+		},
+		"DefaultDepositPercent": {
+			"type": "float",
+			"displayName": "Default Deposit (%)",
+			"description": "",
+			"localized": false,
+			"required": false,
+			"group": "Information",
+			"sortOrder": 40,
+			"editorSettings": {}
+		},
+		"DefaultInterestRate": {
+			"type": "float",
+			"displayName": "Default Interest Rate (% APR)",
+			"description": "",
+			"localized": false,
+			"required": false,
+			"group": "Information",
+			"sortOrder": 50,
+			"editorSettings": {}
+		},
+		"DefaultTermYears": {
+			"type": "integer",
+			"displayName": "Default Term (years)",
+			"description": "",
+			"localized": false,
+			"required": false,
+			"group": "Information",
+			"sortOrder": 60,
+			"editorSettings": {}
+		},
+		"CtaLabel": {
+			"type": "string",
+			"format": "shortString",
+			"displayName": "CTA Label",
+			"description": "",
+			"localized": false,
+			"required": false,
+			"group": "Information",
+			"sortOrder": 70,
+			"editorSettings": {}
+		},
+		"CtaUrl": {
+			"type": "string",
+			"format": "shortString",
+			"displayName": "CTA URL",
+			"description": "",
+			"localized": false,
+			"required": false,
+			"group": "Information",
+			"sortOrder": 80,
+			"editorSettings": {}
+		}
+	}
+}

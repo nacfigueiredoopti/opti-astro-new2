@@ -1,0 +1,12 @@
+fragment MortgageCalculator on MortgageCalculator {
+    Heading
+    Intro {
+        html
+    }
+    DefaultPropertyPrice
+    DefaultDepositPercent
+    DefaultInterestRate
+    DefaultTermYears
+    CtaLabel
+    CtaUrl
+}
