@@ -1,0 +1,249 @@
+---
+import type {
+    PensionCalculatorFragment,
+    DisplaySettingsFragment,
+} from '../../../../__generated/sdk';
+import type { ContentPayload } from '../../../graphql/shared/ContentPayload';
+import { isEditContext } from '../../shared/utils.ts';
+
+const isCmsEdit = isEditContext(Astro.url);
+
+export interface Props {
+    key: string;
+    data: PensionCalculatorFragment;
+    displaySettings: DisplaySettingsFragment[];
+    contentPayload: ContentPayload;
+}
+const { key, data } = Astro.props as Props;
+
+const currentAge = data?.DefaultCurrentAge ?? 45;
+const retirementAge = data?.DefaultRetirementAge ?? 67;
+const currentPot = data?.DefaultCurrentPot ?? 150000;
+const monthlyContribution = data?.DefaultMonthlyContribution ?? 500;
+const employerContribution = data?.DefaultEmployerMonthlyContribution ?? 300;
+const growthPct = data?.DefaultAnnualGrowthPercent ?? 5;
+const ctaLabel = data?.CtaLabel || 'Book a free pension review';
+const ctaUrl = data?.CtaUrl || '/book-a-consultation/';
+
+const componentClass = 'component-pension-calculator';
+---
+
+<div
+    class={`pension-calc card bg-base-100 border border-base-300 shadow-sm w-full max-w-3xl mx-auto ${componentClass}`}
+    data-epi-block-id={(isCmsEdit && key) || undefined}
+>
+    <div class="card-body">
+        {data?.Heading && <h2 class="card-title text-2xl">{data.Heading}</h2>}
+        {data?.Intro?.html && (
+            <div class="text-base-content/80" set:html={data.Intro.html} />
+        )}
+
+        <div class="grid grid-cols-1 gap-4 md:grid-cols-2 mt-2">
+            <label class="form-control w-full">
+                <span class="label-text mb-1 font-medium">Current age</span>
+                <input
+                    type="number"
+                    class="input input-bordered w-full pc-age"
+                    min="16"
+                    max="99"
+                    step="1"
+                    value={currentAge}
+                />
+            </label>
+            <label class="form-control w-full">
+                <span class="label-text mb-1 font-medium">Retirement age</span>
+                <input
+                    type="number"
+                    class="input input-bordered w-full pc-retire-age"
+                    min="16"
+                    max="99"
+                    step="1"
+                    value={retirementAge}
+                />
+            </label>
+            <label class="form-control w-full">
+                <span class="label-text mb-1 font-medium">Current pension pot (£)</span>
+                <input
+                    type="number"
+                    class="input input-bordered w-full pc-pot"
+                    min="0"
+                    step="1000"
+                    value={currentPot}
+                />
+            </label>
+            <label class="form-control w-full">
+                <span class="label-text mb-1 font-medium">Assumed growth (% per year)</span>
+                <input
+                    type="number"
+                    class="input input-bordered w-full pc-growth"
+                    min="0"
+                    max="15"
+                    step="0.25"
+                    value={growthPct}
+                />
+            </label>
+            <label class="form-control w-full">
+                <span class="label-text mb-1 font-medium">Your monthly contribution (£)</span>
+                <input
+                    type="number"
+                    class="input input-bordered w-full pc-monthly"
+                    min="0"
+                    step="50"
+                    value={monthlyContribution}
+                />
+            </label>
+            <label class="form-control w-full">
+                <span class="label-text mb-1 font-medium">Employer monthly contribution (£)</span>
+                <input
+                    type="number"
+                    class="input input-bordered w-full pc-employer"
+                    min="0"
+                    step="50"
+                    value={employerContribution}
+                />
+            </label>
+        </div>
+
+        <div class="stats stats-vertical md:stats-horizontal bg-base-200 mt-6 w-full">
+            <div class="stat">
+                <div class="stat-title">Projected pot at retirement</div>
+                <div class="stat-value text-primary text-3xl pc-projected">—</div>
+                <div class="stat-desc pc-years-desc">&nbsp;</div>
+            </div>
+            <div class="stat">
+                <div class="stat-title">Est. monthly income</div>
+                <div class="stat-value text-3xl pc-income">—</div>
+                <div class="stat-desc">at 4% drawdown</div>
+            </div>
+        </div>
+
+        <div class="grid grid-cols-1 gap-2 md:grid-cols-2 mt-4 text-sm">
+            <div class="flex justify-between border-b border-base-300 pb-1">
+                <span class="opacity-70">25% tax-free lump sum</span>
+                <span class="font-medium pc-lump-sum">—</span>
+            </div>
+            <div class="flex justify-between border-b border-base-300 pb-1">
+                <span class="opacity-70">You'll pay in</span>
+                <span class="font-medium pc-paid-in">—</span>
+            </div>
+            <div class="flex justify-between border-b border-base-300 pb-1">
+                <span class="opacity-70">Your employer pays in</span>
+                <span class="font-medium pc-employer-in">—</span>
+            </div>
+            <div class="flex justify-between border-b border-base-300 pb-1">
+                <span class="opacity-70">Investment growth</span>
+                <span class="font-medium pc-growth-total">—</span>
+            </div>
+        </div>
+
+        <p class="pc-note text-sm text-secondary mt-2 hidden"></p>
+
+        <p class="text-xs opacity-60 mt-4 mb-0">
+            Assumes growth compounds monthly at the annual rate shown, contributions
+            stay level until retirement, and income is drawn at 4% of the full pot
+            per year. Figures are before charges and tax, not adjusted for
+            inflation, and exclude the State Pension.
+        </p>
+
+        <div class="card-actions mt-4 items-center justify-between flex-wrap gap-3">
+            <p class="text-xs opacity-60 mb-0">
+                Illustrative only — not financial advice.
+            </p>
+            <a class="btn btn-secondary" href={ctaUrl}>{ctaLabel}</a>
+        </div>
+    </div>
+</div>
+
+<script>
+    function initPensionCalculators() {
+        const gbp = new Intl.NumberFormat('en-GB', {
+            style: 'currency',
+            currency: 'GBP',
+            maximumFractionDigits: 0,
+        });
+
+        document
+            .querySelectorAll<HTMLElement>('.pension-calc')
+            .forEach((calc) => {
+                if (calc.dataset.pcInit === 'true') return;
+                calc.dataset.pcInit = 'true';
+
+                const q = <T extends HTMLElement>(sel: string) =>
+                    calc.querySelector(sel) as T;
+                const ageEl = q<HTMLInputElement>('.pc-age');
+                const retireEl = q<HTMLInputElement>('.pc-retire-age');
+                const potEl = q<HTMLInputElement>('.pc-pot');
+                const growthEl = q<HTMLInputElement>('.pc-growth');
+                const monthlyEl = q<HTMLInputElement>('.pc-monthly');
+                const employerEl = q<HTMLInputElement>('.pc-employer');
+
+                const num = (el: HTMLInputElement) => {
+                    const v = parseFloat(el?.value);
+                    return Number.isFinite(v) && v > 0 ? v : 0;
+                };
+
+                const update = () => {
+                    const age = Math.floor(num(ageEl));
+                    const retireAge = Math.floor(num(retireEl));
+                    const pot = num(potEl);
+                    const growth = num(growthEl);
+                    const monthly = num(monthlyEl);
+                    const employer = num(employerEl);
+
+                    const years = Math.max(retireAge - age, 0);
+                    const n = years * 12;
+                    const r = growth / 100 / 12;
+                    const contrib = monthly + employer;
+
+                    let projected = pot;
+                    if (n > 0) {
+                        projected =
+                            r === 0
+                                ? pot + contrib * n
+                                : pot * Math.pow(1 + r, n) +
+                                  (contrib * (Math.pow(1 + r, n) - 1)) / r;
+                    }
+                    const paidIn = monthly * n;
+                    const employerIn = employer * n;
+                    const growthTotal = Math.max(
+                        projected - pot - paidIn - employerIn,
+                        0
+                    );
+                    const lumpSum = projected * 0.25;
+                    const monthlyIncome = (projected * 0.04) / 12;
+
+                    q('.pc-projected').textContent = gbp.format(projected);
+                    q('.pc-income').textContent = gbp.format(monthlyIncome);
+                    q('.pc-lump-sum').textContent = gbp.format(lumpSum);
+                    q('.pc-paid-in').textContent = gbp.format(paidIn);
+                    q('.pc-employer-in').textContent = gbp.format(employerIn);
+                    q('.pc-growth-total').textContent = gbp.format(growthTotal);
+                    q('.pc-years-desc').textContent =
+                        years > 0
+                            ? `in ${years} year${years === 1 ? '' : 's'}`
+                            : 'at your current pot';
+
+                    const note = q('.pc-note');
+                    if (age > 0 && retireAge > 0 && retireAge <= age) {
+                        note.textContent =
+                            "You've reached your retirement age — the figures show what your current pot could provide today.";
+                        note.classList.remove('hidden');
+                    } else if (age === 0 || retireAge === 0) {
+                        note.textContent =
+                            'Enter your current age and retirement age to see your projection.';
+                        note.classList.remove('hidden');
+                    } else {
+                        note.classList.add('hidden');
+                    }
+                };
+
+                [ageEl, retireEl, potEl, growthEl, monthlyEl, employerEl].forEach(
+                    (el) => el?.addEventListener('input', update)
+                );
+                update();
+            });
+    }
+
+    document.addEventListener('astro:page-load', initPensionCalculators);
+    initPensionCalculators();
+</script>

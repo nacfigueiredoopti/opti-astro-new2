@@ -1,0 +1,119 @@
+{
+	"key": "PensionCalculator",
+	"displayName": "Pension Calculator",
+	"description": "Interactive UK pension projection calculator with configurable defaults.",
+	"baseType": "component",
+	"sortOrder": 0,
+	"mayContainTypes": [],
+	"mediaFileExtensions": [],
+	"compositionBehaviors": [
+		"elementEnabled"
+	],
+	"properties": {
+		"Heading": {
+			"type": "string",
+			"format": "shortString",
+			"displayName": "Heading",
+			"description": "Title shown above the calculator.",
+			"localized": false,
+			"required": false,
+			"group": "Information",
+			"sortOrder": 10,
+			"indexingType": "searchable",
+			"editorSettings": {}
+		},
+		"Intro": {
+			"type": "richText",
+			"displayName": "Intro",
+			"description": "Short introduction shown under the heading.",
+			"localized": false,
+			"required": false,
+			"group": "Information",
+			"sortOrder": 20,
+			"indexingType": "searchable",
+			"editorSettings": {}
+		},
+		"DefaultCurrentAge": {
+			"type": "integer",
+			"displayName": "Default Current Age",
+			"description": "Pre-filled current age, e.g. 45.",
+			"localized": false,
+			"required": false,
+			"group": "Information",
+			"sortOrder": 30,
+			"editorSettings": {}
+		},
+		"DefaultRetirementAge": {
+			"type": "integer",
+			"displayName": "Default Retirement Age",
+			"description": "Pre-filled intended retirement age, e.g. 67.",
+			"localized": false,
+			"required": false,
+			"group": "Information",
+			"sortOrder": 40,
+			"editorSettings": {}
+		},
+		"DefaultCurrentPot": {
+			"type": "integer",
+			"displayName": "Default Current Pot (£)",
+			"description": "Pre-filled current pension pot in pounds, e.g. 150000.",
+			"localized": false,
+			"required": false,
+			"group": "Information",
+			"sortOrder": 50,
+			"editorSettings": {}
+		},
+		"DefaultMonthlyContribution": {
+			"type": "integer",
+			"displayName": "Default Monthly Contribution (£)",
+			"description": "Pre-filled personal monthly contribution in pounds, e.g. 500.",
+			"localized": false,
+			"required": false,
+			"group": "Information",
+			"sortOrder": 60,
+			"editorSettings": {}
+		},
+		"DefaultEmployerMonthlyContribution": {
+			"type": "integer",
+			"displayName": "Default Employer Monthly Contribution (£)",
+			"description": "Pre-filled employer monthly contribution in pounds, e.g. 300.",
+			"localized": false,
+			"required": false,
+			"group": "Information",
+			"sortOrder": 70,
+			"editorSettings": {}
+		},
+		"DefaultAnnualGrowthPercent": {
+			"type": "float",
+			"displayName": "Default Annual Growth (%)",
+			"description": "Pre-filled assumed annual investment growth, e.g. 5.",
+			"localized": false,
+			"required": false,
+			"group": "Information",
+			"sortOrder": 80,
+			"editorSettings": {}
+		},
+		"CtaLabel": {
+			"type": "string",
+			"format": "shortString",
+			"displayName": "CTA Label",
+			"description": "Button text shown under the results.",
+			"localized": false,
+			"required": false,
+			"group": "Information",
+			"sortOrder": 90,
+			"editorSettings": {}
+		},
+		"CtaUrl": {
+			"type": "string",
+			"format": "shortString",
+			"displayName": "CTA URL",
+			"description": "Where the button links to, e.g. /book-a-consultation/.",
+			"localized": false,
+			"required": false,
+			"group": "Information",
+			"sortOrder": 100,
+			"editorSettings": {}
+		}
+	}
+}

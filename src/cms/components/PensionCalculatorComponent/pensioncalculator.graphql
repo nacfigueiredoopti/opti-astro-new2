@@ -1,0 +1,14 @@
+fragment PensionCalculator on PensionCalculator {
+    Heading
+    Intro {
+        html
+    }
+    DefaultCurrentAge
+    DefaultRetirementAge
+    DefaultCurrentPot
+    DefaultMonthlyContribution
+    DefaultEmployerMonthlyContribution
+    DefaultAnnualGrowthPercent
+    CtaLabel
+    CtaUrl
+}

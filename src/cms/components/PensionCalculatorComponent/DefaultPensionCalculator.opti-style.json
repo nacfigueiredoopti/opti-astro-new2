@@ -1,0 +1,7 @@
+{
+	"key": "DefaultPensionCalculator",
+	"displayName": "Pension Calculator",
+	"contentType": "PensionCalculator",
+	"isDefault": true,
+	"settings": {}
+}
